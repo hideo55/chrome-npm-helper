@@ -15,7 +15,7 @@ chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
   for(var i = 0, len = obj.rows.length; i < len; i++) {
     var tmp = {
       content : obj.rows[i].key,
-      description : obj.rows[i].key
+      description : obj.rows[i].key + ' - ' + obj.rows[i].value.description
     };
     suggestions.push(tmp);
   }
