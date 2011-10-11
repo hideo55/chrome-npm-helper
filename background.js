@@ -3,11 +3,9 @@ var npm_url = 'http://search.npmjs.org';
 chrome.browserAction.onClicked.addListener(function(tab) {
   selectOrCreateTab(npm_url);
 });
-
 chrome.omnibox.onInputEntered.addListener(function(text) {
   searchOnNPM(text);
 });
-
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
   console.log(text);
   var obj = getSuggestions(text);
@@ -21,7 +19,6 @@ chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
   }
   suggest(suggestions);
 });
-
 /*
  * Get suggestions from search.npm.org
  */
@@ -75,27 +72,34 @@ if(!localStorage.getItem('settings')) {
 var notified = {};
 function loadFeed() {
   var settings = JSON.parse(localStorage.getItem('settings'));
-  var query = npm_url + '/_view/updated?limit=' + settings.display;
-
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", query, false);
-  xhr.send();
-  var res = JSON.parse(xhr.responseText);
-  var rows = res.rows;
-  for(var i = 0; i < rows.length; i++) {
-    if(settings.notify) {
+  if(settings.notify) {
+    var query = npm_url + '/_view/updated?limit=' + settings.display;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", query, false);
+    xhr.send();
+    var res = JSON.parse(xhr.responseText);
+    var rows = res.rows;
+    for(var i = 0; i < rows.length; i++) {
       var name = rows[i].id;
+      var description = getDescription(name);
       var link = npm_url + '/#/' + name;
-      var message = name + ' is released!';
       if(!notified[name]) {
         if(!notified[name]) {
-          notify(name, message, link, settings.display);
+          notify(name, description, link, settings.display);
           notified[name] = true;
         }
       }
     }
   }
   setTimeout(loadFeed, 10000);
+}
+
+function getDescription(name) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", npm_url + '/api/' + name, false);
+  xhr.send();
+  var res = JSON.parse(xhr.responseText);
+  return res.description || '';
 }
 
 loadFeed();
