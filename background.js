@@ -81,11 +81,14 @@ function loadFeed() {
     var rows = res.rows;
     for(var i = 0; i < rows.length; i++) {
       var name = rows[i].id;
-      var description = getDescription(name);
+      var desc = getDescription(name);
+      if(desc.version) {
+        name = name + ' ' + desc.version;
+      }
       var link = npm_url + '/#/' + name;
       if(!notified[name]) {
         if(!notified[name]) {
-          notify(name, description, link, settings.display);
+          notify(name, desc.description, link, settings.display);
           notified[name] = true;
         }
       }
@@ -99,7 +102,13 @@ function getDescription(name) {
   xhr.open("GET", npm_url + '/api/' + name, false);
   xhr.send();
   var res = JSON.parse(xhr.responseText);
-  return res.description || '';
+  var desc = res.description || '';
+  var disttag = res['dist-tags'] || {};
+  var version = disttag.latest;
+  return {
+    'description' : desc,
+    'version' : version
+  };
 }
 
 loadFeed();
