@@ -82,13 +82,14 @@ function loadFeed() {
     for(var i = 0; i < rows.length; i++) {
       var name = rows[i].id;
       var desc = getDescription(name);
-      if(desc.version) {
-        name = name + ' ' + desc.version;
+      if( desc.version ){
+        name += ' ' + desc.version;
       }
-      var link = npm_url + '/#/' + name;
+      var message = desc.description;
+      var link = npm_url + '/#/' + rows[i].id;
       if(!notified[name]) {
         if(!notified[name]) {
-          notify(name, desc.description, link, settings.display);
+          notify(name, message, link, settings.display);
           notified[name] = true;
         }
       }
