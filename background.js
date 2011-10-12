@@ -73,7 +73,7 @@ var notified = {};
 function loadFeed() {
   var settings = JSON.parse(localStorage.getItem('settings'));
   if(settings.notify) {
-    var query = npm_url + '/_view/updated?limit=' + settings.display;
+    var query = npm_url + '/_view/updated?descending=true&limit=' + settings.display;
     var xhr = new XMLHttpRequest();
     xhr.open("GET", query, false);
     xhr.send();
