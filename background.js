@@ -82,7 +82,7 @@ function loadFeed() {
     for(var i = 0; i < rows.length; i++) {
       var name = rows[i].id;
       var desc = getDescription(name);
-      if( desc.version ){
+      if(desc.version) {
         name += ' ' + desc.version;
       }
       var message = desc.description;
@@ -114,19 +114,20 @@ function getDescription(name) {
 
 loadFeed();
 
+var n;
 function notify(title, message, link, display) {
   if(webkitNotifications.checkPermission() == 0) {
-    var popup = webkitNotifications.createNotification('icons/npm-32.png', title, message);
-    popup.ondisplay = function() {
+    n = webkitNotifications.createNotification('icons/npm-32.png', title, message);
+    n.ondisplay = function() {
       setTimeout(function() {
-        popup.cancel();
+        n.cancel();
       }, display * 1000);
     };
-    popup.onclick = function() {
+    n.onclick = function() {
       selectOrCreateTab(link);
-      popup.cancel();
+      n.cancel();
     };
-    popup.show();
+    n.show();
   } else {
     webkitNotifications.requestPermission();
   }
