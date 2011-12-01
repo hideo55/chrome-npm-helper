@@ -7,7 +7,6 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
   searchOnNPM(text);
 });
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
-  console.log(text);
   var obj = getSuggestions(text);
   var suggestions = [];
   for(var i = 0, len = obj.rows.length; i < len; i++) {
