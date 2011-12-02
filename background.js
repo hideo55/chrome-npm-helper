@@ -87,10 +87,8 @@ function loadFeed() {
       var message = desc.description;
       var link = npm_url + '/#/' + rows[i].id;
       if(!notified[name]) {
-        if(!notified[name]) {
-          notify(name, message, link, settings.display);
-          notified[name] = true;
-        }
+        notify(name, message, link, settings.display);
+        notified[name] = true;
       }
     }
   }
