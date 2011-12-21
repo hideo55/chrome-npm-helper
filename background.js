@@ -111,18 +111,17 @@ function getDescription(name) {
 
 loadFeed();
 
-var n;
 function notify(title, message, link, display) {
   if(webkitNotifications.checkPermission() == 0) {
-    n = webkitNotifications.createNotification('icons/npm-32.png', title, message);
+    var n = webkitNotifications.createNotification('icons/npm-32.png', title, message);
+    n.onclick = function() {
+      selectOrCreateTab(link);
+      n.cancel();
+    };
     n.ondisplay = function() {
       setTimeout(function() {
         n.cancel();
       }, display * 1000);
-    };
-    n.onclick = function() {
-      selectOrCreateTab(link);
-      n.cancel();
     };
     n.show();
   } else {
