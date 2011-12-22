@@ -60,7 +60,7 @@ function selectOrCreateTab(url) {
 if(!localStorage.getItem('settings')) {
   var settings = {
     notify : true,
-    display : 10
+    display : 5
   };
   localStorage.setItem('settings', JSON.stringify(settings));
 }
